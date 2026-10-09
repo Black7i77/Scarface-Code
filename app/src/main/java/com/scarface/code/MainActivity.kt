@@ -177,7 +177,9 @@ class MainActivity : ComponentActivity() {
         work.addView(HorizontalScrollView(this).apply { isHorizontalScrollBarEnabled = false; addView(keys) }, LinearLayout.LayoutParams(-1, dp(48)))
         val outputHeader = row(panel)
         outputHeader.addView(label("OUTPUT", 11f, cyan).apply { typeface = Typeface.DEFAULT_BOLD }, LinearLayout.LayoutParams(0, dp(48), 1f))
-        runButton = action("▶", "Run Python or JavaScript") { runCurrent() }
+        runButton = action("▶", "Run Python or JavaScript") { runCurrent() }.apply {
+            setOnLongClickListener { runCurrent(debug = true); true }
+        }
         stopButton = action("■", "Stop program") { runtime.stop() }
         outputHeader.addView(runButton); outputHeader.addView(stopButton)
         outputHeader.addView(action("⌫", "Clear output") { if (!runtime.running) { runtime.output.begin("clear"); refreshOutput() } })
@@ -426,14 +428,15 @@ class MainActivity : ComponentActivity() {
         workPane.layoutParams = params
     }
     private fun toggleOutput() { outputPanel.visibility = if (outputPanel.visibility == View.VISIBLE) View.GONE else View.VISIBLE }
-    private fun runCurrent() {
+    private fun runCurrent(debug: Boolean = false) {
         if (runtime.running) { error("Stop the current program first"); return }
         val b = workspace.active ?: return
-        val language = LanguageCatalog.forFilename(b.name)?.id
-        if (language != "python" && language != "javascript") { error("Editing is supported. Run currently supports .py and .js only; TypeScript and JSX need transpilation."); return }
+        val language = LanguageCatalog.forFilename(b.name)?.id ?: "unknown"
+        if (language !in setOf("python", "javascript", "sql", "json", "xml")) { error("No offline execution engine is bundled for this language yet."); return }
         if (b.name.substringAfterLast('.').lowercase() == "jsx") { error("JSX requires transpilation; run plain JavaScript in a .js file."); return }
+        if (debug && language != "python") { error("Debug trace currently supports Python only"); return }
         outputPanel.visibility = View.VISIBLE
-        try { runtime.start(language, b.text, b.name) } catch (e: Exception) { error(e.message ?: "Could not run") }
+        try { runtime.start(language, b.text, b.name, debug) } catch (e: Exception) { error(e.message ?: "Could not run") }
     }
     private fun queueOutput() {
         if (!outputUpdateScheduled) { outputUpdateScheduled = true; main.postDelayed(outputTask, 50) }
