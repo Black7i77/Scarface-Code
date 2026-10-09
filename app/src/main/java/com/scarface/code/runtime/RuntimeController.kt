@@ -32,9 +32,9 @@ class RuntimeController(private val context: Context) {
             listener?.invoke()
         }
     })
-    fun start(language: String, source: String, filename: String): String {
+    fun start(language: String, source: String, filename: String, debug: Boolean = false): String {
         check(!running) { "Stop the current run first" }
-        require(language == "python" || language == "javascript") { "Run supports Python and JavaScript" }
+        require(language in setOf("python", "javascript", "sql", "json", "xml")) { "No offline engine for this language" }
         val id = UUID.randomUUID().toString()
         val file = File(context.filesDir, "runs/$id.txt"); file.parentFile!!.mkdirs(); file.writeText(source)
         sourceFile = file
@@ -45,7 +45,7 @@ class RuntimeController(private val context: Context) {
                 remote = Messenger(binder)
                 try { remote!!.send(Message.obtain(null, START).apply {
                     replyTo = receiver
-                    data = Bundle().apply { putString("id", id); putString("language", language); putString("filename", filename) }
+                    data = Bundle().apply { putString("id", id); putString("language", language); putString("filename", filename); putBoolean("debug", debug) }
                 }) } catch (e: RemoteException) { fail("Runtime connection failed") }
             }
             override fun onServiceDisconnected(name: ComponentName) { if (running && output.runId == id && connection === this) fail("Runtime stopped") }

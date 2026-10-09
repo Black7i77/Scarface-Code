@@ -50,11 +50,12 @@ class RuntimeService : Service() {
                 val source = file.readText()
                 when (data.getString("language")) {
                     "javascript" -> success = JsRunner.run(source, data.getString("filename") ?: "script.js", emit = emit)
+                    "sql", "json", "xml" -> success = DocumentRunners.run(data.getString("language") ?: "", source, emit)
                     "python" -> {
                         if (!Python.isStarted()) Python.start(AndroidPlatform(applicationContext))
                         val module = Python.getInstance().getModule("runner")
                         val callback = object : PythonOutput { override fun emit(channel: String, text: String) { emit(channel, text) } }
-                        success = module.callAttr("execute", source, data.getString("filename") ?: "script.py", module.callAttr("java_emitter", callback)).toBoolean()
+                        success = module.callAttr("execute", source, data.getString("filename") ?: "script.py", module.callAttr("java_emitter", callback), data.getBoolean("debug", false)).toBoolean()
                     }
                     else -> emit("stderr", "This language has no bundled runtime\n")
                 }
