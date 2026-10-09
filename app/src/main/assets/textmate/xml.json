@@ -1,0 +1,70 @@
+{
+  "name": "XML",
+  "scopeName": "source.xml",
+  "patterns": [
+    {
+      "name": "comment.block",
+      "begin": "<!--",
+      "end": "-->"
+    },
+    {
+      "name": "entity.name.tag",
+      "match": "</?[A-Za-z][A-Za-z0-9:-]*|/?>"
+    },
+    {
+      "name": "entity.other.attribute-name",
+      "match": "[A-Za-z-]+(?=\\s*=)"
+    },
+    {
+      "name": "comment.line",
+      "match": "//.*$"
+    },
+    {
+      "name": "comment.block",
+      "begin": "/\\*",
+      "end": "\\*/"
+    },
+    {
+      "name": "string.quoted.double",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [
+        {
+          "name": "constant.character.escape",
+          "match": "\\\\."
+        }
+      ]
+    },
+    {
+      "name": "string.quoted.single",
+      "begin": "'",
+      "end": "'",
+      "patterns": [
+        {
+          "name": "constant.character.escape",
+          "match": "\\\\."
+        }
+      ]
+    },
+    {
+      "name": "constant.numeric",
+      "match": "\\b(?:0[xX][0-9a-fA-F]+|\\d+(?:\\.\\d+)?)\\b"
+    },
+    {
+      "name": "keyword.control",
+      "match": "\\b(?:xml|version|encoding)\\b"
+    },
+    {
+      "name": "entity.name.function",
+      "match": "\\b[A-Za-z_][A-Za-z0-9_]*(?=\\s*\\()"
+    },
+    {
+      "name": "variable.other",
+      "match": "\\$[A-Za-z_][A-Za-z0-9_]*"
+    },
+    {
+      "name": "keyword.operator",
+      "match": "[+*/%=!<>|&:-]+"
+    }
+  ]
+}

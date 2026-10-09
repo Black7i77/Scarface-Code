@@ -1,0 +1,166 @@
+{
+  "languages": [
+    {
+      "name": "python",
+      "scopeName": "source.python",
+      "grammar": "textmate/python.json",
+      "languageConfiguration": "textmate/python-configuration.json"
+    },
+    {
+      "name": "javascript",
+      "scopeName": "source.javascript",
+      "grammar": "textmate/javascript.json",
+      "languageConfiguration": "textmate/javascript-configuration.json"
+    },
+    {
+      "name": "typescript",
+      "scopeName": "source.typescript",
+      "grammar": "textmate/typescript.json",
+      "languageConfiguration": "textmate/typescript-configuration.json"
+    },
+    {
+      "name": "html",
+      "scopeName": "source.html",
+      "grammar": "textmate/html.json",
+      "languageConfiguration": "textmate/html-configuration.json"
+    },
+    {
+      "name": "css",
+      "scopeName": "source.css",
+      "grammar": "textmate/css.json",
+      "languageConfiguration": "textmate/css-configuration.json"
+    },
+    {
+      "name": "php",
+      "scopeName": "source.php",
+      "grammar": "textmate/php.json",
+      "languageConfiguration": "textmate/php-configuration.json"
+    },
+    {
+      "name": "c",
+      "scopeName": "source.c",
+      "grammar": "textmate/c.json",
+      "languageConfiguration": "textmate/c-configuration.json"
+    },
+    {
+      "name": "cpp",
+      "scopeName": "source.cpp",
+      "grammar": "textmate/cpp.json",
+      "languageConfiguration": "textmate/cpp-configuration.json"
+    },
+    {
+      "name": "csharp",
+      "scopeName": "source.csharp",
+      "grammar": "textmate/csharp.json",
+      "languageConfiguration": "textmate/csharp-configuration.json"
+    },
+    {
+      "name": "java",
+      "scopeName": "source.java",
+      "grammar": "textmate/java.json",
+      "languageConfiguration": "textmate/java-configuration.json"
+    },
+    {
+      "name": "kotlin",
+      "scopeName": "source.kotlin",
+      "grammar": "textmate/kotlin.json",
+      "languageConfiguration": "textmate/kotlin-configuration.json"
+    },
+    {
+      "name": "rust",
+      "scopeName": "source.rust",
+      "grammar": "textmate/rust.json",
+      "languageConfiguration": "textmate/rust-configuration.json"
+    },
+    {
+      "name": "go",
+      "scopeName": "source.go",
+      "grammar": "textmate/go.json",
+      "languageConfiguration": "textmate/go-configuration.json"
+    },
+    {
+      "name": "swift",
+      "scopeName": "source.swift",
+      "grammar": "textmate/swift.json",
+      "languageConfiguration": "textmate/swift-configuration.json"
+    },
+    {
+      "name": "dart",
+      "scopeName": "source.dart",
+      "grammar": "textmate/dart.json",
+      "languageConfiguration": "textmate/dart-configuration.json"
+    },
+    {
+      "name": "bash",
+      "scopeName": "source.bash",
+      "grammar": "textmate/bash.json",
+      "languageConfiguration": "textmate/bash-configuration.json"
+    },
+    {
+      "name": "powershell",
+      "scopeName": "source.powershell",
+      "grammar": "textmate/powershell.json",
+      "languageConfiguration": "textmate/powershell-configuration.json"
+    },
+    {
+      "name": "sql",
+      "scopeName": "source.sql",
+      "grammar": "textmate/sql.json",
+      "languageConfiguration": "textmate/sql-configuration.json"
+    },
+    {
+      "name": "json",
+      "scopeName": "source.json",
+      "grammar": "textmate/json.json",
+      "languageConfiguration": "textmate/json-configuration.json"
+    },
+    {
+      "name": "yaml",
+      "scopeName": "source.yaml",
+      "grammar": "textmate/yaml.json",
+      "languageConfiguration": "textmate/yaml-configuration.json"
+    },
+    {
+      "name": "xml",
+      "scopeName": "source.xml",
+      "grammar": "textmate/xml.json",
+      "languageConfiguration": "textmate/xml-configuration.json"
+    },
+    {
+      "name": "markdown",
+      "scopeName": "source.markdown",
+      "grammar": "textmate/markdown.json",
+      "languageConfiguration": "textmate/markdown-configuration.json"
+    },
+    {
+      "name": "ruby",
+      "scopeName": "source.ruby",
+      "grammar": "textmate/ruby.json",
+      "languageConfiguration": "textmate/ruby-configuration.json"
+    },
+    {
+      "name": "lua",
+      "scopeName": "source.lua",
+      "grammar": "textmate/lua.json",
+      "languageConfiguration": "textmate/lua-configuration.json"
+    },
+    {
+      "name": "r",
+      "scopeName": "source.r",
+      "grammar": "textmate/r.json",
+      "languageConfiguration": "textmate/r-configuration.json"
+    },
+    {
+      "name": "toml",
+      "scopeName": "source.toml",
+      "grammar": "textmate/toml.json",
+      "languageConfiguration": "textmate/toml-configuration.json"
+    },
+    {
+      "name": "dockerfile",
+      "scopeName": "source.dockerfile",
+      "grammar": "textmate/dockerfile.json",
+      "languageConfiguration": "textmate/dockerfile-configuration.json"
+    }
+  ]
+}
