@@ -13,14 +13,6 @@ class RunnerTests(unittest.TestCase):
         result = runner.execute(source, 'sample.py', lambda channel, text: output.append((channel, text)))
         return result, ''.join(t for c, t in output if c == 'stdout'), ''.join(t for c, t in output if c == 'stderr')
 
-    def test_debug_trace_shows_lines_and_variables(self):
-        messages = []
-        ok = runner.execute('x = 4\nprint(x + 1)', 'sample.py', lambda channel, text: messages.append((channel, text)), debug=True)
-        self.assertTrue(ok)
-        self.assertIn('[debug] line 2:', ''.join(t for c, t in messages if c == 'stderr'))
-        self.assertIn('x=4', ''.join(t for c, t in messages if c == 'stderr'))
-        self.assertIn('5', ''.join(t for c, t in messages if c == 'stdout'))
-
     def test_print_and_unicode(self):
         ok, out, err = self.run_code("print('Hello 🐺')")
         self.assertTrue(ok); self.assertEqual(out, 'Hello 🐺\n'); self.assertEqual(err, '')

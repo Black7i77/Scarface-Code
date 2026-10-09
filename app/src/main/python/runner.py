@@ -36,41 +36,14 @@ class Output:
         return 'utf-8'
 
 
-def execute(source, filename, emit, debug=False):
+def execute(source, filename, emit):
     budget = [0, False]
     out = Output('stdout', emit, budget)
     err = Output('stderr', emit, budget)
     namespace = {'__name__': '__main__', '__file__': filename}
-    def trace(frame, event, arg):
-        if event != 'line' or frame.f_code.co_filename != filename:
-            return trace
-        # Bounded diagnostic trace; no pauses or interactive breakpoints yet.
-        if trace.steps < 100:
-            values = []
-            for key, value in list(frame.f_locals.items())[:8]:
-                if key.startswith('__'):
-                    continue
-                try:
-                    display = repr(value)
-                except BaseException:
-                    display = '<unavailable>'
-                values.append(f'{key}={display[:80]}')
-            emit('stderr', f'[debug] line {frame.f_lineno}: {", ".join(values)}\n')
-        elif trace.steps == 100:
-            emit('stderr', '[debug] trace limit reached (100 steps)\n')
-        trace.steps += 1
-        return trace
-    trace.steps = 0
     with contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
         try:
-            compiled = compile(source, filename, 'exec')
-            if debug:
-                sys.settrace(trace)
-            try:
-                exec(compiled, namespace, namespace)
-            finally:
-                if debug:
-                    sys.settrace(None)
+            exec(compile(source, filename, 'exec'), namespace, namespace)
             return True
         except BaseException:
             traceback.print_exc()
