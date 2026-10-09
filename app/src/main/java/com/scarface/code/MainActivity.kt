@@ -24,7 +24,10 @@ import io.github.rosemoe.sora.widget.CodeEditor
 import io.github.rosemoe.sora.widget.EditorSearcher
 import io.github.rosemoe.sora.widget.SelectionMovement
 import java.util.concurrent.Executors
-
+import android.widget.*
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import android.webkit.WebSettings
 /** Native phone workbench. Documents and runtime workers have separate lifecycles. */
 class MainActivity : ComponentActivity() {
     companion object { private val io = Executors.newSingleThreadExecutor() }
@@ -428,9 +431,54 @@ class MainActivity : ComponentActivity() {
         workPane.layoutParams = params
     }
     private fun toggleOutput() { outputPanel.visibility = if (outputPanel.visibility == View.VISIBLE) View.GONE else View.VISIBLE }
+
+    private fun previewHtml(source: String) {
+        val webView = WebView(this).apply {
+            settings.javaScriptEnabled = true
+            settings.domStorageEnabled = true
+            settings.allowFileAccess = false
+            settings.allowContentAccess = false
+            settings.javaScriptCanOpenWindowsAutomatically = false
+            settings.mixedContentMode =
+                WebSettings.MIXED_CONTENT_NEVER_ALLOW
+
+            webViewClient = WebViewClient()
+
+            loadDataWithBaseURL(
+                "https://appassets.androidplatform.net/",
+                source,
+                "text/html",
+                "UTF-8",
+                null
+            )
+        }
+
+        val dialog = AlertDialog.Builder(this)
+            .setTitle("Scarface Code — HTML Preview")
+            .setView(webView)
+            .setPositiveButton("Close", null)
+            .create()
+
+        dialog.setOnDismissListener {
+            webView.stopLoading()
+            webView.destroy()
+        }
+
+        dialog.show()
+    }
+
     private fun runCurrent(debug: Boolean = false) {
         if (runtime.running) { error("Stop the current program first"); return }
         val b = workspace.active ?: return
+        if (b.name.endsWith(".html", ignoreCase = true) ||
+            b.name.endsWith(".htm", ignoreCase = true)) {
+            if (debug) {
+                error("HTML debugging is not available yet")
+                return
+            }
+            previewHtml(b.text)
+            return
+        }
         val language = LanguageCatalog.forFilename(b.name)?.id ?: "unknown"
         if (language !in setOf("python", "javascript", "sql", "json", "xml")) { error("No offline execution engine is bundled for this language yet."); return }
         if (b.name.substringAfterLast('.').lowercase() == "jsx") { error("JSX requires transpilation; run plain JavaScript in a .js file."); return }
