@@ -1,17 +1,11 @@
 .gradle/
-.gradle-dist/
 build/
 **/build/
 local.properties
 .idea/
 *.iml
-*.log
-*.apk
-*.aab
 *.jks
 *.keystore
 *.pem
 *.key
 .env
-.env.*
-.DS_Store
