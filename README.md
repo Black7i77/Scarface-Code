@@ -1,3 +1,10 @@
+<img width="1080" height="2400" alt="7562" src="https://github.com/user-attachments/assets/4991410d-854f-454b-aa93-24ad9867c73d" />
+<img width="1080" height="2400" alt="7560" src="https://github.com/user-attachments/assets/c2278fb9-dcef-4514-87d5-80dac2a4893a" />
+<img width="1080" height="2400" alt="7559" src="https://github.com/user-attachments/assets/a94fd0f1-d68c-400a-aee5-51432b6732de" />
+<img width="1536" height="691" alt="7558" src="https://github.com/user-attachments/assets/eae2a42f-7b4c-4f5e-9d62-2aa7642e1889" />
+<img width="1080" height="2400" alt="7555(1)" src="https://github.com/user-attachments/assets/3cf8b168-e71a-452f-8da4-f7536beb6f58" />
+<img width="1080" height="2400" alt="7555" src="https://github.com/user-attachments/assets/67167f10-33f1-4a02-84fb-aa5cdcffc1c4" />
+<img width="1080" height="2400" alt="7554" src="https://github.com/user-attachments/assets/012fcb4d-cd61-4539-9fb1-a00ff90072dd" />
 # Scarface Code — Android editor v0.1
 
 An independent, offline Android code editor inspired by the dark workbench layout of VS Code. Built for phone touch controls and external keyboards. No Microsoft affiliation.
