@@ -273,11 +273,115 @@ class MainActivity : ComponentActivity() {
         try { contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION) }
         catch (_: SecurityException) { try { contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION) } catch (_: SecurityException) {} }
     }
+
+    private fun showBinaryInspector(name: String, bytes: ByteArray) {
+        val text = android.text.SpannableStringBuilder()
+
+        for (offset in bytes.indices step 16) {
+            text.append(
+                "%08X  ".format(offset)
+            )
+
+            val end = minOf(offset + 16, bytes.size)
+
+            for (index in offset until end) {
+                val value = bytes[index].toInt() and 0xFF
+                val start = text.length
+
+                text.append("%02X ".format(value))
+
+                if (value < 32 || value > 126) {
+                    text.setSpan(
+                        android.text.style.ForegroundColorSpan(
+                            Color.rgb(255, 95, 95)
+                        ),
+                        start,
+                        text.length,
+                        android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+                }
+            }
+
+            for (index in end until offset + 16) {
+                text.append("   ")
+            }
+
+            text.append(" | ")
+
+            for (index in offset until end) {
+                val value = bytes[index].toInt() and 0xFF
+                text.append(
+                    if (value in 32..126) value.toChar() else '.'
+                )
+            }
+
+            text.append("\\n")
+        }
+
+        val viewer = TextView(this).apply {
+            setText(text)
+            typeface = Typeface.MONOSPACE
+            textSize = 11f
+            setTextColor(Color.WHITE)
+            setBackgroundColor(Color.rgb(16, 22, 30))
+            setPadding(dp(12), dp(12), dp(12), dp(12))
+            setTextIsSelectable(true)
+        }
+
+        val scroll = HorizontalScrollView(this).apply {
+            addView(
+                ScrollView(this@MainActivity).apply {
+                    addView(viewer)
+                }
+            )
+        }
+
+        AlertDialog.Builder(this)
+            .setTitle("Binary Inspector — $name")
+            .setMessage(
+                "Read-only byte preview. " +
+                "Binary content does not necessarily mean encryption."
+            )
+            .setView(scroll)
+            .setPositiveButton("Close", null)
+            .show()
+    }
+
     private fun loadFile(uri: Uri) {
         io.execute {
             try { val text = documents.read(uri); val name = documents.name(uri)
                 main.post { if (!isDestroyed) { captureCursor(); workspace.open(name, text, uri.toString()); showActive(); showExplorer(false) } }
-            } catch (e: Exception) { main.post { error("Could not open file: ${e.message}") } }
+            } catch (e: Exception) {
+                val message = e.message ?: "Unknown error"
+
+                if (
+                    message.contains("Binary files cannot") ||
+                    e is java.nio.charset.CharacterCodingException
+                ) {
+                    try {
+                        val preview = documents.readBinaryPreview(uri)
+                        val filename = documents.name(uri)
+
+                        main.post {
+                            if (!isDestroyed) {
+                                showBinaryInspector(filename, preview)
+                            }
+                        }
+                    } catch (previewError: Exception) {
+                        main.post {
+                            if (!isDestroyed) {
+                                error("Could not inspect file: ${previewError.message}")
+                            }
+                        }
+                    }
+                } else {
+                    main.post {
+                        if (!isDestroyed) {
+                            error("Could not open file: $message")
+                        }
+                    }
+                }
+            }
         }
     }
     private fun save(b: EditorBuffer? = workspace.active, saveAs: Boolean = false) {

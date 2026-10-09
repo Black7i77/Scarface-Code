@@ -22,6 +22,33 @@ class DocumentStore(private val context: Context) {
         } ?: error("Could not open file")
         return TextCodec.decode(bytes)
     }
+
+    fun readBinaryPreview(uri: Uri, limit: Int = 4096): ByteArray {
+        require(limit in 1..65536) {
+            "Invalid preview size"
+        }
+
+        return context.contentResolver.openInputStream(uri)?.use { input ->
+            val out = ByteArrayOutputStream()
+            val buffer = ByteArray(1024)
+
+            while (out.size() < limit) {
+                val count = input.read(
+                    buffer,
+                    0,
+                    minOf(buffer.size, limit - out.size())
+                )
+
+                if (count < 0) break
+                if (count == 0) continue
+
+                out.write(buffer, 0, count)
+            }
+
+            out.toByteArray()
+        } ?: error("Could not open binary preview")
+    }
+
     fun write(uri: Uri, text: String) {
         val bytes = text.toByteArray(Charsets.UTF_8)
         require(bytes.size <= MAX_BYTES) { "File exceeds the 2 MiB editor limit; split it before saving" }
